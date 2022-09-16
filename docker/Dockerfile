@@ -8,24 +8,18 @@ RUN apk update && apk upgrade && \
 
 WORKDIR /opt
 
-RUN git clone https://github.com/Ride-The-Lightning/RTL.git && cd RTL && git checkout cln-peer-swap
-
-
-RUN npm install
+RUN git clone https://github.com/Ride-The-Lightning/RTL.git \
+    && cd RTL \
+    && git checkout cln-peer-swap
 
 # ---------------
 # Build App
 # ---------------
-COPY . .
-
-# Build the Angular application
-RUN npm run buildfrontend
-
-# Build the Backend from typescript server
-RUN npm run buildbackend
-
-# Remove non production necessary modules
-RUN npm prune --production
+RUN cd RTL \
+    && npm install \
+    && npm run buildfrontend \
+    && npm run buildbackend \
+    && npm prune --production
 
 # ---------------
 # Release App
