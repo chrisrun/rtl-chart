@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "rtl.fullname" . }}
+  labels:
+    app: {{ template "rtl.name" . }}
+    chart: {{ template "rtl.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data: 
+  rtl.conf: |
+    {
+    "multiPass": {{ index (lookup "v1" "Secret" .Release.Namespace "rtl").data "multipass" | quote }},
+    "port": "3000",
+    "defaultNodeIndex": 1,
+    "SSO": {
+      "rtlSSO": 0,
+      "rtlCookiePath": "",
+      "logoutRedirectLink": ""
+    },
+    "nodes": [
+        {
+          "index": 1,
+          "lnNode": "LND 1",
+          "lnImplementation": "LND",
+          "Authentication": {
+            "macaroonPath": "/root/.lnd/",
+            "swapMacaroonPath": "/root/.loop/loop.macaroon"
+          },
+          "Settings": {
+            "enablePeerswap": {{ .Values.configuration.enablePeerswap }},
+            "userPersona": "OPERATOR",
+            "themeMode": {{ .Values.configuration.themeMode | quote }},
+            "themeColor": {{ .Values.configuration.themeColor | quote }},
+            "channelBackupPath": "/root/.rtl/backups",
+            "logLevel": {{ .Values.configuration.logLevel | quote }},
+            "fiatConversion": false,
+            "lnServerUrl": "https://lnd-internal.lnd.svc.cluster.local:8080",
+            "swapServerUrl": "https://lit-internal.lit.svc.cluster.local:8081"
+          }
+      }
+    ]
+  }

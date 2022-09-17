@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "rtl.fullname" . }}
+  labels:
+    app: {{ template "rtl.name" . }}
+    chart: {{ template "rtl.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: {{ include "rtl.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "rtl.name" . }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          {{ if ((.Values.image).digest) }}
+          image: "{{ .Values.image.repository }}@{{ .Values.image.digest }}"
+          {{ else }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          {{ end }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          resources: 
+          {{ toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: CONFIGMAP_SUM
+              value: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+            - name: SECRET_SUM
+              value: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+          ports:
+            - name: rtl-port
+              containerPort: 3000
+          volumeMounts:
+            - name: configmap
+              mountPath: /RTL/RTL-Config.json
+              subPath: rtl.conf
+            - name: secrets
+              mountPath: /root/.lnd/admin.macaroon
+              subPath: admin.macaroon
+            - name: secrets
+              mountPath: /root/.pool/pool.macaroon
+              subPath: pool.macaroon
+            - name: secrets
+              mountPath: /root/.loop/loop.macaroon
+              subPath: loop.macaroon
+      volumes:
+        - name: secrets
+          secret:
+            secretName: {{ template "rtl.fullname" . }}
+        - name: configmap
+          configMap:
+            name: {{ template "rtl.fullname" . }}

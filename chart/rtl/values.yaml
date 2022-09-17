@@ -1,0 +1,25 @@
+
+# Set the docker image version and tag
+image:
+  repository: chr1st1anh/rtl
+  tag: 0.13.1-cln-peer-swap
+  digest: sha256:df47cfb7ad10038c00c9c6b4ed213ef926ad136b1bf5d59f5d0b62071fad6de0
+  pullPolicy: IfNotPresent
+
+# bitcoin.conf configuration file
+configuration:
+  lndNamespace: lnd
+  externalIp: rtl1-tejon 
+  enablePeerswap: true
+  themeMode: DAY
+  themeColor: PURPLE
+  logLevel: INFO
+
+# resources that the pod is allowed to consume
+resources:
+  requests:
+    cpu: 250m
+    memory: 1G
+  limits:
+    cpu: 250m
+    memory: 1G

@@ -1,0 +1,19 @@
+apiVersion: v1
+appVersion: 0.13.1-cln-peer-swap
+description: RTL chart
+name: rtl
+version: 0.1.0
+home: https://chrisrun.github.io/rtl-chart/
+icon: https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1024px-Bitcoin.svg.png
+keywords:
+    - lightning
+    - blockchain
+    - bitcoin
+    - helm
+    - docker
+maintainers:
+    - name: Christian Hubmann
+      email: chrisrun@users.noreply.github.com
+      url: https://chrisrun.github.io/rtl-chart/
+sources:
+    - https://github.com/chrisrun/rtl-chart/
