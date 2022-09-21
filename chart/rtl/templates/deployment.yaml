@@ -1,22 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "rtl.fullname" . }}
+  name: rtl
   labels:
     app: {{ template "rtl.name" . }}
     chart: {{ template "rtl.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+  annotations:
+    checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
 spec:
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: {{ include "rtl.name" . }}
+      app: rtl
   template:
     metadata:
       labels:
-        app: {{ include "rtl.name" . }}
+        app: rtl
     spec:
       containers:
         - name: {{ .Chart.Name }}
@@ -33,6 +35,11 @@ spec:
               value: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
             - name: SECRET_SUM
               value: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+            - name: APP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: multipass
+                  name: {{ template "rtl.name" . }}
           ports:
             - name: rtl-port
               containerPort: 3000

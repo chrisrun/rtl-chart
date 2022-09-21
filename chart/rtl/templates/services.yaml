@@ -20,5 +20,6 @@ spec:
       port: 8080
       targetPort: rtl-port
   selector:
-    app: {{ template "rtl.name" . }}
-    release: {{ .Release.Name }}
+    app: rtl
+
+

@@ -9,7 +9,7 @@ image:
 # bitcoin.conf configuration file
 configuration:
   lndNamespace: lnd
-  externalIp: rtl1-tejon 
+  externalIp: rtl1 
   enablePeerswap: true
   themeMode: DAY
   themeColor: PURPLE

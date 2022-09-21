@@ -10,7 +10,6 @@ metadata:
 data: 
   rtl.conf: |
     {
-    "multiPass": {{ index (lookup "v1" "Secret" .Release.Namespace "rtl").data "multipass" | quote }},
     "port": "3000",
     "defaultNodeIndex": 1,
     "SSO": {
@@ -38,6 +37,6 @@ data:
             "lnServerUrl": "https://lnd-internal.lnd.svc.cluster.local:8080",
             "swapServerUrl": "https://lit-internal.lit.svc.cluster.local:8081"
           }
-      }
-    ]
-  }
+        }
+      ]
+    }
