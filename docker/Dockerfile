@@ -10,7 +10,7 @@ WORKDIR /opt
 
 RUN git clone https://github.com/Ride-The-Lightning/RTL.git \
     && cd RTL \
-    && git checkout cln-peer-swap
+    && git checkout v0.13.1
 
 # ---------------
 # Build App
